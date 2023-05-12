@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import filters, mixins, viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import LimitOffsetPagination
@@ -5,8 +6,6 @@ from rest_framework.permissions import (
     IsAuthenticated, IsAuthenticatedOrReadOnly,
 )
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-
-from django.contrib.auth.models import User
 
 from api.permissions import IsAuthorOrAuthenticated
 from api.serializers import (
@@ -43,8 +42,7 @@ class CommentViewSet(ModelViewSet):
         serializer.save(post=self._get_post(), author=self.request.user)
 
     def _get_post(self):
-        post = get_object_or_404(Post, pk=self.kwargs['post_id'])
-        return post
+        return get_object_or_404(Post, pk=self.kwargs['post_id'])
 
 
 class FollowViewSet(mixins.CreateModelMixin,

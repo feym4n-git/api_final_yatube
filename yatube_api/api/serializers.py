@@ -1,9 +1,8 @@
-from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer
-
 from django.contrib.auth.models import User
 from django.core.exceptions import BadRequest
 from django.shortcuts import get_object_or_404
+from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
 
 from posts.models import Comment, Follow, Group, Post
 
@@ -42,8 +41,8 @@ class FollowSerializer(ModelSerializer):
         user = self.context['request'].user
         if Follow.objects.filter(
                 user=user.id,
-                following=following.id) or user == following:
-            raise BadRequest()
+                following=following.id).exists() or user == following:
+            raise serializers.ValidationError()
         return value
 
     class Meta:
